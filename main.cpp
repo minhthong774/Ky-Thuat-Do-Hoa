@@ -5,7 +5,7 @@
 #include <vector>
 #include "xuli.h"
 #include "Button.h"
-
+//abcdef
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 void draw_xOy();
 void draw_triangle_direction(int x1, int y1, int x2, int y2, int x3, int y3);
