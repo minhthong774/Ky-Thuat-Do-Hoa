@@ -3,9 +3,14 @@
 #include <string>
 #include <math.h>
 #include <vector>
+#include <iomanip>
 #include "xuli.h"
 #include "Button.h"
+#include "Matrix.h"
 #include <map>
+
+using namespace transformation;
+
 //abcdef
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 void draw_xOy();
@@ -80,8 +85,8 @@ int main(int argc, char** argv) {
 	textBoxs.push_back(textBoxy);
 	
 	first_screen();
+	put_pixel(0,0);
 	
- 	put_pixel(0,0);
 	while(true){
  		delay(0.0001);
  		if(ismouseclick(WM_LBUTTONDOWN)){
