@@ -5,7 +5,8 @@
 #include <vector>
 #include "xuli.h"
 #include "Button.h"
-
+#include <map>
+//abcdef
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 void draw_xOy();
 void draw_triangle_direction(int x1, int y1, int x2, int y2, int x3, int y3);
@@ -36,42 +37,49 @@ int x_prev,y_prev,x_curr,y_curr;
 int draw = 0;
 
 int mode=0;
-
+std::vector<Button*> buttons;
+std::vector<TextBox*> textBoxs;
 int main(int argc, char** argv) {
 	// now, you can run project
     initwindow(1280, 760);           // init window graphics
-    first_screen();
     
-	ButtonDraw* button1 = new ButtonDraw(50,20,200,60, "NET DUT");
-	button1->setFunctionDraw(&draw_net_dut);
-	ButtonDraw* button2 = new ButtonDraw(50,60,200,100,"NET CHAM GACH");
-	button2->setFunctionDraw(&draw_net_cham_gach);
-	ButtonDraw* button3 = new ButtonDraw(50,100,200,140,"NET HAI CHAM GACH");
-	button3->setFunctionDraw(&draw_net_hai_cham_gach);
-	ButtonDraw* button4 = new ButtonDraw(50,140,200,180, "MUI TEN");
-	button4->setFunctionDraw(&draw_arrow);
-	ButtonDraw* button5 = new ButtonDraw(50,180,200,220, "HINH CHU NHAT");
-	button5->setFunctionDraw(&draw_rectangle);
-	std::vector<ButtonDraw*> buttonDraws;
-	buttonDraws.push_back(button1);
-	buttonDraws.push_back(button2);
-	buttonDraws.push_back(button3);
-	buttonDraws.push_back(button4);
-	buttonDraws.push_back(button5);
-	
+	Button* button1 = new Button(50,20,200,60, "NET DUT");
+	Button* button2 = new Button(50,60,200,100,"NET CHAM GACH");
+	Button* button3 = new Button(50,100,200,140,"NET HAI CHAM GACH");
+	Button* button4 = new Button(50,140,200,180, "MUI TEN");
+	Button* button5 = new Button(50,180,200,220, "HINH CHU NHAT");
 	Button* button6 = new Button(50,220,200,260, "CLEAR");
 	Button* button7 = new Button(50,300,100,320, "PUT");
 	Button* button8 = new Button(50,330,100,350, "X: ");
 	Button* button9 = new Button(50,350,100,370, "Y: ");
-	std::vector<Button*> buttons;
 	
+	std::map<std::string,int> modes;
+	modes.insert(std::pair<std::string,int>("NET DUT", 0));
+	modes.insert(std::pair<std::string,int>("NET CHAM GACH", 1));
+	modes.insert(std::pair<std::string,int>("NET HAI CHAM GACH", 2));
+	modes.insert(std::pair<std::string,int>("MUI TEN", 3));
+	modes.insert(std::pair<std::string,int>("HINH CHU NHAT", 4));
+	modes.insert(std::pair<std::string,int>("CLEAR", 5));
+	modes.insert(std::pair<std::string,int>("PUT", 6));
+	modes.insert(std::pair<std::string,int>("X: ", 7));
+	modes.insert(std::pair<std::string,int>("Y: ", 8));
+	
+	TextBox* textBoxx = new TextBox(110,330,150,350, "GET X");
+	TextBox* textBoxy = new TextBox(110,350,150,370, "GET Y");
+	
+	buttons.push_back(button1);
+	buttons.push_back(button2);
+	buttons.push_back(button3);
+	buttons.push_back(button4);
+	buttons.push_back(button5);
 	buttons.push_back(button6);
 	buttons.push_back(button7);
 	buttons.push_back(button8);
 	buttons.push_back(button9);
-	for(std::vector<ButtonDraw*>::iterator it = buttonDraws.begin(); it != buttonDraws.end(); ++it){
-		(*it)->visible();
-	}
+	textBoxs.push_back(textBoxx);
+	textBoxs.push_back(textBoxy);
+	
+	first_screen();
 	
  	put_pixel(0,0);
 	while(true){
@@ -88,9 +96,30 @@ int main(int argc, char** argv) {
 				y_curr = to_descartes_coord_y(y);
 				draw++;
 				if(draw == 2){
-					for(std::vector<ButtonDraw*>::iterator it= buttonDraws.begin(); it != buttonDraws.end(); ++it){
-						if((*it)->getChose()) (*it)->draw(x_prev,y_prev,x_curr,y_curr);
-						draw = 0;
+					for(std::vector<Button*>::iterator it= buttons.begin(); it != buttons.end(); ++it){
+						if((*it)->getChose()) {
+							//draw tangle
+							switch(modes[(*it)->getName()]) {
+								case 0:draw_net_dut(x_prev, y_prev, x_curr, y_curr);
+									break;
+								case 1:draw_net_cham_gach(x_prev, y_prev, x_curr, y_curr);
+									break;
+								case 2:draw_net_hai_cham_gach(x_prev, y_prev, x_curr, y_curr);
+									break;
+								case 3:draw_arrow(x_prev, y_prev, x_curr, y_curr);
+									break;
+								case 4:draw_rectangle(x_prev, y_prev, x_curr, y_curr);
+									break;
+								case 5:
+									break;
+								case 6:
+									break;
+								default:
+									break;
+							}
+							draw = 0;
+							break;
+						}
 					}
 					draw = 0;
 				}
@@ -98,6 +127,14 @@ int main(int argc, char** argv) {
 			}
 			for(std::vector<Button*>::iterator it= buttons.begin(); it != buttons.end(); ++it){
 				if((*it)->is_in_range(x,y)){
+					if((*it)->getName() == "CLEAR"){
+						first_screen();
+						break;
+					}
+					if((*it)->getName() == "PUT"){
+						put_pixel(x_coord, y_coord);
+						break;
+					}
 					(*it)->set_highlight(true);
 					(*it)->visible();
 					(*it)->setChose(true);
@@ -107,6 +144,18 @@ int main(int argc, char** argv) {
 					(*it)->visible();
 				}
 			}
+			for(std::vector<TextBox*>::iterator it=textBoxs.begin();it!=textBoxs.end();++it){
+				if((*it)->is_in_range(x,y)){
+					(*it)->action();
+					if((*it)->getName() == "GET X"){
+						cston((*it)->getText(), &x_coord);
+					};
+					if((*it)->getName() == "GET Y"){
+						cston((*it)->getText(), &y_coord);
+					};
+				}
+			}
+			
 		}
 	}
  	
@@ -118,7 +167,12 @@ void first_screen(){
 	reset_color();                 // set background
     cleardevice();               // set text color
  	draw_xOy();
-	
+	for(std::vector<Button*>::iterator it= buttons.begin(); it != buttons.end(); ++it){
+		(*it)->visible();
+	}
+	for(std::vector<TextBox*>::iterator it=textBoxs.begin();it!=textBoxs.end();++it){
+		(*it)->visible();
+	}
 }
 
 void draw_xOy(){

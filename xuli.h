@@ -27,7 +27,7 @@ int to_descartes_coord_y(int y){
 int daunhay(int x,int y){
 	int a=getcolor();
 	int nhay=1;
-	while(!kbhit()){
+	while(!kbhit()&&!ismouseclick(WM_LBUTTONDOWN)){
 		int dem=0;
 		if(nhay){
 			setcolor(0);
@@ -44,6 +44,8 @@ int daunhay(int x,int y){
 			dem++;
 		}
 	}
+	setcolor(15);
+	line(x,y,x,y+10);
 	setcolor(a);
 	return 1;
 }
@@ -75,6 +77,23 @@ int ntocs(char* s,int x){//chuyen so thanh chuoi
 		j++;
 	}
 	s[j]='\0';
+	return 1;
+}
+
+int cston(std::string s,int* x){
+	int a =0;
+	if(s[0]==45){
+		for(int i=1;i<s.length();i++){
+			a=a*10+(s[i]-48);
+		}
+		a=-a;
+	}
+	else{
+		for(int i=0;i<s.length();i++){
+			a=a*10+(s[i]-48);
+		}
+	}
+	(*x)=a;
 	return 1;
 }
 
