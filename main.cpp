@@ -7,13 +7,14 @@
 #include "DescartesCoordinate.h"
 #include "pixel.h"
 #include "baitapNho.h"
+#include "Shape.h"
 #include "xuli.h"
 #include "Button.h"
 #include "Matrix.h"
 #include <map>
 
 using namespace transformation;
-
+using namespace shape;
 void first_screen();
 
 int x_coord = 0;
@@ -66,6 +67,20 @@ int main(int argc, char** argv) {
 	
 	first_screen();
 	put_pixel(0,0);
+	
+	//testing
+	Vec4 a(5,7);
+	Matrix4x4 matrix1 = translate(-3,7);
+	Matrix4x4 matrix2 = matrix1*rotateZ(180*3.14/180);
+	a = a*matrix2;
+	std::cout<<round(a.x)<<"+++"<<round(a.y)<<std::endl;
+	Vec4 b(-34,-23);
+	Line::getInstance()->drawLine(a,b);
+	Circle circle(5,5,15);
+	circle.midPointCircleDraw();
+	Triangle triangle(14,10,-5,13,-2,-15);
+	triangle.draw();
+	//-----------------------------
 	
 	while(true){
  		delay(0.0001);

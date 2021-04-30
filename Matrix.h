@@ -48,17 +48,17 @@ namespace transformation{
 	class Vec4{
 		public:
 		Vec4():x(1),y(1),z(1),w(1){}
-		Vec4(int x,int y):x(x),y(y),z(1),w(1){
+		Vec4(float x,float y):x(x),y(y),z(1),w(1){
 		}
-		Vec4(int x,int y,int z):x(x),y(y),z(z),w(1){
+		Vec4(float x,float y,float z):x(x),y(y),z(z),w(1){
 		}
-		Vec4(int x,int y,int z,int w):x(x),y(y),z(z),w(w){
+		Vec4(float x,float y,float z,float w):x(x),y(y),z(z),w(w){
 		}
 		Vec4 operator*(const Matrix4x4& matrix4x4_mulBy){
-			int xr = this->x*matrix4x4_mulBy.matrix4x4[0][0]+this->y*matrix4x4_mulBy.matrix4x4[1][0]+this->z*matrix4x4_mulBy.matrix4x4[2][0]+this->w*matrix4x4_mulBy.matrix4x4[3][0];
-			int yr = this->x*matrix4x4_mulBy.matrix4x4[0][1]+this->y*matrix4x4_mulBy.matrix4x4[1][1]+this->z*matrix4x4_mulBy.matrix4x4[2][1]+this->w*matrix4x4_mulBy.matrix4x4[3][1];
-			int zr = this->x*matrix4x4_mulBy.matrix4x4[0][2]+this->y*matrix4x4_mulBy.matrix4x4[1][2]+this->z*matrix4x4_mulBy.matrix4x4[2][2]+this->w*matrix4x4_mulBy.matrix4x4[3][2];
-			int wr = w;
+			float xr = this->x*matrix4x4_mulBy.matrix4x4[0][0]+this->y*matrix4x4_mulBy.matrix4x4[1][0]+this->z*matrix4x4_mulBy.matrix4x4[2][0]+this->w*matrix4x4_mulBy.matrix4x4[3][0];
+			float yr = this->x*matrix4x4_mulBy.matrix4x4[0][1]+this->y*matrix4x4_mulBy.matrix4x4[1][1]+this->z*matrix4x4_mulBy.matrix4x4[2][1]+this->w*matrix4x4_mulBy.matrix4x4[3][1];
+			float zr = this->x*matrix4x4_mulBy.matrix4x4[0][2]+this->y*matrix4x4_mulBy.matrix4x4[1][2]+this->z*matrix4x4_mulBy.matrix4x4[2][2]+this->w*matrix4x4_mulBy.matrix4x4[3][2];
+			float wr = w;
 			Vec4 result(xr,yr,zr,wr);
 			return result;
 		}
@@ -73,6 +73,8 @@ namespace transformation{
 			0,0,1,0,
 			x,y,0,1
 		};
+		Matrix4x4 result(arr);
+		return result;
 	}
 	
 	Matrix4x4 scale(int x, int y){
@@ -82,15 +84,19 @@ namespace transformation{
 			0,0,1,0,
 			0,0,0,1
 		};
+		Matrix4x4 result(arr);
+		return result;
 	}
 	
-	Matrix4x4 translate(int x, int y=0, int z=0){
+	Matrix4x4 translate(int x, int y, int z){
 		float arr[]={
 			1,0,0,0,
 			0,1,0,0,
 			0,0,1,0,
 			x,y,z,1
 		};
+		Matrix4x4 result(arr);
+		return result;
 	}
 	
 	Matrix4x4 scale(int x, int y, int z){
@@ -100,6 +106,8 @@ namespace transformation{
 			0,0,z,0,
 			0,0,0,1
 		};
+		Matrix4x4 result(arr);
+		return result;
 	}
 	
 	Matrix4x4 rotateX(float angle){
@@ -109,6 +117,8 @@ namespace transformation{
 			0,sin(angle),cos(angle),0,
 			0,0,0,1
 		};
+		Matrix4x4 result(arr);
+		return result;
 	}
 	
 	Matrix4x4 rotateY(float angle){
@@ -118,6 +128,8 @@ namespace transformation{
 			-sin(angle),0,cos(angle),0,
 			0,0,0,1
 		};
+		Matrix4x4 result(arr);
+		return result;
 	}
 	
 	Matrix4x4 rotateZ(float angle){
@@ -127,6 +139,8 @@ namespace transformation{
 			0,0,1,0,
 			0,0,0,1
 		};
+		Matrix4x4 result(arr);
+		return result;
 	}
 }
 

@@ -1,13 +1,16 @@
-#ifndef __Shape.h
-#define __Shape.h
-#include "Matrix.h""
+#ifndef __Line.h
+#define __Line.h
+#include "Matrix.h"
 #include "baitapNho.h"
+using namespace transformation;
 namespace shape{
 	class Line{
 		public:
-			Line getInstance(){
-				if(this->instance == NULL){
-					this->instance = new Line();
+			Line(){
+			}
+			static Line* getInstance(){
+				if(instance==NULL){
+					instance = new Line();
 				}
 				return instance;
 			}
@@ -105,7 +108,8 @@ namespace shape{
 				}
 			}
 		private:
-			static Line instance;
+			static Line* instance;
 	};
+	Line* Line::instance = NULL;
 }
 #endif
