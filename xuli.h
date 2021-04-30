@@ -4,6 +4,7 @@ const int min = -90;
 const int max = 90;
 const int x_offset = 800;
 const int y_offset = 30;
+int colorDraw = RED;
 
 void reset_color(){
 	setcolor(0);

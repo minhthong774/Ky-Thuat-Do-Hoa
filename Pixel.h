@@ -14,10 +14,10 @@ void put_pixel_grid(int x, int y){
 void put_pixel_screen(int x, int y){
 	x=(x-x_offset)/5*5;
 	y=(y-y_offset)/5*5;
-	setcolor(RED);
-	setfillstyle(SOLID_FILL, RED);
+	setcolor(colorDraw);
+	setfillstyle(SOLID_FILL, colorDraw);
 	rectangle(x+1+x_offset,y+1+y_offset,x+4+x_offset,y+4+y_offset);
-	floodfill(x+2+x_offset,y+2+y_offset,RED);													
+	floodfill(x+2+x_offset,y+2+y_offset,colorDraw);													
 	reset_color();
 }
 

@@ -4,6 +4,7 @@
 #include <math.h>
 #include <vector>
 #include <iomanip>
+#include <time.h>
 #include "DescartesCoordinate.h"
 #include "pixel.h"
 #include "baitapNho.h"
@@ -11,6 +12,7 @@
 #include "xuli.h"
 #include "Button.h"
 #include "Matrix.h"
+#include "Human.h"
 #include <map>
 
 using namespace transformation;
@@ -69,17 +71,46 @@ int main(int argc, char** argv) {
 	put_pixel(0,0);
 	
 	//testing
-	Vec4 a(5,7);
-	Matrix4x4 matrix1 = translate(-3,7);
-	Matrix4x4 matrix2 = matrix1*rotateZ(180*3.14/180);
-	a = a*matrix2;
-	std::cout<<round(a.x)<<"+++"<<round(a.y)<<std::endl;
-	Vec4 b(-34,-23);
-	Line::getInstance()->drawLine(a,b);
-	Circle circle(5,5,15);
-	circle.midPointCircleDraw();
-	Triangle triangle(14,10,-5,13,-2,-15);
-	triangle.draw();
+//	Vec4 a(5,7);
+//	Matrix4x4 matrix1 = translate(-3,7);
+//	Matrix4x4 matrix2 = matrix1*rotateZ(180*3.14/180);
+//	a = a*matrix2;
+//	std::cout<<round(a.x)<<"+++"<<round(a.y)<<std::endl;
+//	Vec4 b(-34,-23);
+//	Line::getInstance()->drawLine(a,b);
+//	Circle circle(5,5,15);
+//	circle.midPointCircleDraw();
+//	Triangle triangle(14,10,-5,13,-2,-15);
+//	triangle.draw();
+	Human human;
+	Matrix4x4 trans = rotateZ(3.14*90/180.0);
+	Matrix4x4 trans1 = scale(2,2,1);
+	human.Transformation(trans1);
+	human.Draw();
+	time_t timer;
+	struct tm y2k = {0};
+	double seconds,secondslast;
+	
+	y2k.tm_hour = 0;   y2k.tm_min = 0; y2k.tm_sec = 0;
+	y2k.tm_year = 100; y2k.tm_mon = 0; y2k.tm_mday = 1;
+	
+	time(&timer);  /* get current time; same as: timer = time(NULL)  */
+	
+	secondslast = difftime(timer,mktime(&y2k));
+	std::cout<<std::fixed<<seconds;
+//	while(true){
+//		delay(20);
+//		time(&timer);
+//		seconds = difftime(timer,mktime(&y2k));
+//		Matrix4x4 trans = translate(-1,0);
+//		colorDraw = CYAN;
+//		human.Draw();
+//		colorDraw = RED;
+//		human.Transformation(trans);
+//		human.Draw();
+//		secondslast = seconds;
+//		std::cout<<seconds<<std::endl;
+//	}
 	//-----------------------------
 	
 	while(true){
