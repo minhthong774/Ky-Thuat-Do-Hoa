@@ -4,6 +4,9 @@
 #include <math.h>
 #include <vector>
 #include <iomanip>
+#include "DescartesCoordinate.h"
+#include "pixel.h"
+#include "baitapNho.h"
 #include "xuli.h"
 #include "Button.h"
 #include "Matrix.h"
@@ -11,31 +14,8 @@
 
 using namespace transformation;
 
-//abcdef
-/* run this program using the console pauser or add your own getch, system("pause") or input loop */
-void draw_xOy();
-void draw_triangle_direction(int x1, int y1, int x2, int y2, int x3, int y3);
-void put_pixel(int x, int y);
-void put_pixel_grid(int x, int y);
-void put_pixel_screen(int x, int y);
-bool is_in_range(int x, int y);
-void enter_coords_x();
-void enter_coords_y();
 void first_screen();
-bool functionReturnTrue(int a);
-void draw_line(int x1,int y1,int x2,int y2, bool (*checkVisible)(int));
-void draw_line(int x1,int y1,int x2,int y2);
-bool checkVisibleNetDut(int count);
-bool checkVisibleNetChamGach(int count);
-bool checkVisibleNetHaiChamGach(int count);
-void draw_net_dut(int x1,int y1,int x2,int y2);
-void draw_net_cham_gach(int x1,int y1,int x2,int y2);
-void draw_net_hai_cham_gach(int x1,int y1,int x2,int y2);
-void draw_arrow(int x1,int y1,int x2,int y2);
-void draw_rectangle(int x1,int y1,int x2,int y2);
 
-int x_text=0;
-int y_text=0;
 int x_coord = 0;
 int y_coord = 0;
 int x_prev,y_prev,x_curr,y_curr;
@@ -46,7 +26,7 @@ std::vector<Button*> buttons;
 std::vector<TextBox*> textBoxs;
 int main(int argc, char** argv) {
 	// now, you can run project
-    initwindow(1280, 760);           // init window graphics
+    initwindow(1920, 1280);           // init window graphics
     
 	Button* button1 = new Button(50,20,200,60, "NET DUT");
 	Button* button2 = new Button(50,60,200,100,"NET CHAM GACH");
@@ -179,232 +159,4 @@ void first_screen(){
 		(*it)->visible();
 	}
 }
-
-void draw_xOy(){
-	//draw grid pixel			
-	for(int x = -50;x<=max;x++){
-		for(int y = -50;y<=max;y++){
-			put_pixel_grid(to_screen_coord_x(x),to_screen_coord_y(y));
-		}
-	}
-	//draw axis
-	setcolor(1);
-	//x axis
-	line(x_offset-10, 5*max+ y_offset+3, x_offset+max*5*2+10, 5*max+ y_offset+3);
-	//y axis
-	line(5*max+ x_offset+3, y_offset-10, 5*max+x_offset+3, y_offset+max*5*2+10);
-	//left
-	draw_triangle_direction(x_offset-25,5*max+ y_offset,
-							x_offset-10,5*max+ y_offset-15,
-							x_offset-10,5*max+ y_offset+15);
-	//top
-	draw_triangle_direction(5*max+ x_offset-15, y_offset-10,
-							5*max+ x_offset+15, y_offset-10,
-							5*max+ x_offset, y_offset-25);
-	//right
-	draw_triangle_direction(x_offset+max*5*2+25, 5*max+ y_offset,
-							x_offset+max*5*2+10, 5*max+ y_offset-15,
-							x_offset+max*5*2+10, 5*max+ y_offset+15);	
-	//bottom
-	draw_triangle_direction(5*max+x_offset-15, y_offset+max*5*2+10,
-							5*max+x_offset+15, y_offset+max*5*2+10,
-							5*max+x_offset, y_offset+max*5*2+25);
-	reset_color();
-	outtextxy(x_offset+max*5*2+10, 5*max+ y_offset+20,"X");
-	outtextxy(5*max+ x_offset + 20, y_offset-10,"Y");
-	outtextxy(5*max+ x_offset + 15, 5*max+ y_offset + 5, "O");
-}
-
-void put_pixel_grid(int x, int y){
-	x=(x-x_offset)/5*5;
-	y=(y-y_offset)/5*5;
-	setcolor(CYAN);
-	setfillstyle(SOLID_FILL, CYAN);
-	rectangle(x+1+x_offset,y+1+y_offset,x+4+x_offset,y+4+y_offset);
-	floodfill(x+2+x_offset,y+2+y_offset,CYAN);													
-	reset_color();
-}
-
-void put_pixel_screen(int x, int y){
-	x=(x-x_offset)/5*5;
-	y=(y-y_offset)/5*5;
-	setcolor(RED);
-	setfillstyle(SOLID_FILL, RED);
-	rectangle(x+1+x_offset,y+1+y_offset,x+4+x_offset,y+4+y_offset);
-	floodfill(x+2+x_offset,y+2+y_offset,RED);													
-	reset_color();
-}
-
-void put_pixel(int x, int y){
-	put_pixel_screen(to_screen_coord_x(x), to_screen_coord_y(y));
-}
-
-void draw_triangle_direction(int x1, int y1, int x2, int y2, int x3, int y3){
-	setcolor(1);
-	setfillstyle(SOLID_FILL, BLUE);
-	line(x1,y1,x2,y2);
-	line(x1,y1,x3,y3);
-	line(x2,y2,x3,y3);
-	putpixel(x1,y1,BLUE);
-	putpixel(x2,y2,BLUE);
-	putpixel(x3,y3,BLUE);
-	floodfill(((x1+x3)/2+x2)/2, ((y1+y3)/2+y2)/2, BLUE);
-	reset_color();
-}
-
-bool is_in_range(int x, int y){
-	return (x>x_offset && x<5*max*2+x_offset)&&(y > y_offset && y<5*max*2+y_offset)?true:false;
-}
-
-void enter_coords_x(){
-	x_coord=process_coord();
-}
-
-void enter_coords_y(){
-	y_coord=process_coord();
-}
-
-void draw_line(int x1,int y1,int x2,int y2, bool (*checkVisible)(int)){
-	int dx = x1 > x2 ? x1 - x2 : x2 - x1;
-	int dy = y2 > y1 ? y2 - y1 : y1 -y2;
-	
-	int count = 0;
-	
-	if(dx > dy) {
-		int p = 2*dy - dx;
-		int x = x1;
-		int y = y1;
-		put_pixel(x, y);
-		
-		if(x > x2) {
-			while(x > x2) {
-			if(p < 0) {
-				p = p + 2*dy;
-			} else {
-				p = p + 2*dy - 2*dx;
-				if(y <= y2) {
-					y++;
-				} else {
-					y--;
-				}
-			}
-			x--;
-			count++;
-			if(checkVisible(count))put_pixel(x, y);
-			}
-		} else if( x < x2) {
-				while(x < x2) {
-			if(p < 0) {
-				p = p + 2*dy;
-				y =y ;
-			} else {
-				p = p + 2*dy - 2*dx;
-				if(y >= y2) {
-					y--;
-				} else {
-					y++;
-				}
-			}
-			x++;
-			count++;
-			if(checkVisible(count))put_pixel(x, y);
-			}
-		}
-	} else {
-		int p = 2*dx - dy;
-		
-		int x = x1;
-		int y = y1;
-		
-		put_pixel(x, y);
-		
-		if(y > y2) {
-			while(y > y2) {
-			if(p < 0) {
-				p = p + 2*dx;
-			} else {
-				p = p + 2*dx - 2*dy;
-				if(x <= x2) {
-					x++;
-				} else {
-					x--;
-				}
-			}
-			y--;
-			count++;
-			if(checkVisible(count))put_pixel(x, y);
-			}
-		} else if( y < y2) {
-				while(y < y2) {
-			if(p < 0) {
-				p = p + 2*dx;
-			} else {
-				p = p + 2*dx - 2*dy;
-				if(x >= x2) {
-					x--;
-				} else {
-					x++;
-				}
-			}
-			y++;
-			count++;
-			if(checkVisible(count))put_pixel(x, y);
-			}
-		}
-	}
-}
-
-bool functionReturnTrue(int a){
-	return true;
-}
-
-void draw_line(int x1,int y1,int x2,int y2){
-	draw_line(x1,y1,x2,y2,&functionReturnTrue);
-}
-
-bool checkVisibleNetDut(int count){
-	return count %12 != 11 && count % 12 != 10;
-}
-
-bool checkVisibleNetChamGach(int count){
-	return count %12 != 11 && count % 12 != 9;
-}
-
-bool checkVisibleNetHaiChamGach(int count){
-	return count %12 != 11 && count % 12 != 9 && count % 12 != 7;
-}
-
-void draw_net_dut(int x1,int y1,int x2,int y2){
-	draw_line(x1,y1,x2,y2,&checkVisibleNetDut);
-}
-void draw_net_cham_gach(int x1,int y1,int x2,int y2){
-	draw_line(x1,y1,x2,y2,&checkVisibleNetChamGach);
-}
-void draw_net_hai_cham_gach(int x1,int y1,int x2,int y2){
-	draw_line(x1,y1,x2,y2,&checkVisibleNetHaiChamGach);
-}
-
-void draw_arrow(int start_x, int start_y, int end_x, int end_y){
-	int arrow_lenght_ = 10;
-	double arrow_degrees_ = 0.5;
-	double x1, y1 , x2,y2;
-    double angle = atan2 (end_y - start_y, end_x - start_x) + M_PI;
- 		
-    x1 = end_x + arrow_lenght_ * cos(angle - arrow_degrees_);
-    y1 = end_y + arrow_lenght_ * sin(angle - arrow_degrees_);
-    x2 = end_x + arrow_lenght_ * cos(angle + arrow_degrees_);
-    y2 = end_y + arrow_lenght_ * sin(angle + arrow_degrees_);
-    draw_line(end_x,end_y,x1,y1);
-    draw_line(end_x,end_y,x2,y2);
-    draw_line(x1,y1,x2,y2);
-    draw_line(start_x,start_y,end_x,end_y);
-}
-
-void draw_rectangle(int x1,int y1,int x2,int y2){
-	draw_line(x1,y1,x1,y2);
-	draw_line(x1,y1,x2,y1);
-	draw_line(x2,y2,x1,y2);
-	draw_line(x2,y2,x2,y1);
-}
-
 

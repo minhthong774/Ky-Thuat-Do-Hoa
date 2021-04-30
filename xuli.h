@@ -1,8 +1,8 @@
 #ifndef _ve_
 #define _ve_
-const int min = -50;
-const int max = 50;
-const int x_offset = 250;
+const int min = -90;
+const int max = 90;
+const int x_offset = 800;
 const int y_offset = 30;
 
 void reset_color(){
