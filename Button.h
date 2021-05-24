@@ -35,16 +35,21 @@ class Button{
 		}
 		
 		void visible(){
-			int color=YELLOW;
+			int bkcolor=YELLOW;
+			int color=RED;
 			if (highlight){
-				color = BLUE;
+				bkcolor = BLUE;
+				color = WHITE;
 			}
-			setcolor(RED);
-		 	setfillstyle(SOLID_FILL, color);
+			setcolor(BLACK);
 		 	rectangle(left,top,right,bottom);
-		 	floodfill((left+right)/2,(top+bottom)/2,RED);
-		 	setbkcolor(color);
+		 	setfillstyle(SOLID_FILL, bkcolor);
+		 	floodfill((left+right)/2,(top+bottom)/2,BLACK);
+		 	
+		 	setbkcolor(bkcolor);
+		 	setcolor(color);
 		 	outtextxy(left+5, top+5, name);
+		 	
 		 	reset_color();
 		}
 		bool is_in_range(int x, int y){
@@ -100,6 +105,10 @@ class TextBox{
 		 	rectangle(left,top,right,bottom);
 		 	floodfill((left+right)/2,(top+bottom)/2,0);
 		 	setbkcolor(color);
+		 	moveto(left+5,top+5);
+		 	if(this->text!=NULL){
+		 		outtext(this->text);
+			 }
 		 	reset_color();
 		}
 		
@@ -108,6 +117,14 @@ class TextBox{
 		}
 		
 		void action(){
+			int color=15;
+			setcolor(10);
+		 	setfillstyle(SOLID_FILL, color);
+		 	rectangle(left,top,right,bottom);
+		 	floodfill((left+right)/2,(top+bottom)/2,10);
+		 	setbkcolor(color);
+		 	reset_color();
+		 	
 			reset_color();
 			while(kbhit()){
 				char c=getch();
@@ -128,7 +145,15 @@ class TextBox{
 				ynhay=gety();
 			}
 			daunhay(xnhay,ynhay);
-			while((s[i]=getch())!=13){
+			while(true){
+				s[i]='\0';
+				if(kbhit()){
+					s[i]=getch();
+					if(s[i]==13){
+						visible();
+						break;
+					}
+				}
 				if(s[i]==8){//xoa 1 ki tu
 					moveto(x,y);
 					int a=getcolor();
@@ -167,10 +192,17 @@ class TextBox{
 				if(ismouseclick(WM_LBUTTONDOWN)){
 		 			int x,y;
 		 			getmouseclick(WM_LBUTTONDOWN,x,y);
-		 			if(!this->is_in_range(x,y))break;
+		 			if(!this->is_in_range(x,y)){
+		 				visible();
+						break;
+					 }
 				}
 			}
 			this->text = s;
+		}
+		
+		void clear(){
+			this->text = NULL;
 		}
 		
 	private:

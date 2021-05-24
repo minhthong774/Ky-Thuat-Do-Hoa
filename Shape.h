@@ -79,69 +79,6 @@ namespace shape{
 			Vec4 vertex1,vertex2,vertex3,vertex4;
 	};
 	
-	class Circle{
-		public:
-			Circle(){
-			}
-			Circle(Vec4 center, int r):center(center),r(r){
-			}
-			Circle(int x, int y, int r):center(x,y),r(r){
-			}
-			void transform(Matrix4x4 matrixtransform){
-				center = center*matrixtransform;
-			}
-			void midPointCircleDraw() {
-				int x_centre = center.x;
-				int y_centre = center.y;
-				int x= 0, y = r;
-				int  p;
-				int dem = 0;
-				
-			 	p= 5/4 - r;
-			 	
-				while(x < y) {
-						if(r < 15) {
-							if(dem %12 !=6 && dem%12!=7 ) {
-							put_pixel(x_centre + x, y_centre + y);	
-							put_pixel(x_centre + y, y_centre + x);
-							put_pixel(x_centre - x, y_centre + y);
-							put_pixel(x_centre - y, y_centre + x);
-											
-							put_pixel(x_centre - y, y_centre - x);
-							put_pixel(x_centre - x, y_centre - y);
-							put_pixel(x_centre + x, y_centre - y);
-							put_pixel(x_centre + y, y_centre - x);
-					}
-						} else  {
-							if(dem %12 !=11 && dem%12!=10 && dem%12!=9) {
-							put_pixel(x_centre + x, y_centre + y);	
-							put_pixel(x_centre + y, y_centre + x);
-							put_pixel(x_centre - x, y_centre + y);
-							put_pixel(x_centre - y, y_centre + x);
-											
-							put_pixel(x_centre - y, y_centre - x);
-							put_pixel(x_centre - x, y_centre - y);
-							put_pixel(x_centre + x, y_centre - y);
-							put_pixel(x_centre + y, y_centre - x);
-					}
-						}
-					
-			
-					if( p < 0) {
-						p+= 2*x +3;
-					} else {
-						p+= 2*x -2*y +5;	
-						y--;
-					}
-					dem++;
-					x++;	
-			}
-			}
-		private:
-			Vec4 center;
-			int r;
-	};
-	
 	class Elip{
 		public:
 			Elip(){
@@ -213,9 +150,83 @@ namespace shape{
 			    	put_pixel(xc-x, yc-y);
 			    }
 			}
+			void midPointCircleDraw() {
+				int r = a;
+				int x_centre = center.x;
+				int y_centre = center.y;
+				int x= 0, y = r;
+				int  p;
+				int dem = 0;
+				
+			 	p= 5/4 - r;
+			 	
+				while(x < y) {
+						if(r < 15) {
+							if(dem %12 !=6 && dem%12!=7 ) {
+							put_pixel(x_centre + x, y_centre + y);	
+							put_pixel(x_centre + y, y_centre + x);
+							put_pixel(x_centre - x, y_centre + y);
+							put_pixel(x_centre - y, y_centre + x);
+											
+							put_pixel(x_centre - y, y_centre - x);
+							put_pixel(x_centre - x, y_centre - y);
+							put_pixel(x_centre + x, y_centre - y);
+							put_pixel(x_centre + y, y_centre - x);
+					}
+						} else  {
+							if(dem %12 !=11 && dem%12!=10 && dem%12!=9) {
+							put_pixel(x_centre + x, y_centre + y);	
+							put_pixel(x_centre + y, y_centre + x);
+							put_pixel(x_centre - x, y_centre + y);
+							put_pixel(x_centre - y, y_centre + x);
+											
+							put_pixel(x_centre - y, y_centre - x);
+							put_pixel(x_centre - x, y_centre - y);
+							put_pixel(x_centre + x, y_centre - y);
+							put_pixel(x_centre + y, y_centre - x);
+					}
+						}
+					
+			
+					if( p < 0) {
+						p+= 2*x +3;
+					} else {
+						p+= 2*x -2*y +5;	
+						y--;
+					}
+					dem++;
+					x++;	
+			}
+			}
+			void draw(){
+				if(a==b){
+					midPointCircleDraw();
+				}
+				else{
+					elipMidpoint();
+				}
+			}
 		private:
 			Vec4 center;
 			int a, b;
+	};
+	
+	class Circle{
+		public:
+			Circle(){
+			}
+			Circle(Vec4 center, int r):elip(center,r,r){
+			}
+			Circle(int x, int y, int r):elip(x,y,r,r){
+			}
+			void transform(Matrix4x4 matrixtransform){
+				this->elip.transform(matrixtransform);
+			}
+			void draw(){
+				this->elip.draw();
+			}
+		private:
+			Elip elip;
 	};
 	
 	

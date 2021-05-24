@@ -24,12 +24,12 @@ class Human{
 			body.transform(transMatrix);
 		}
 		void Draw(){
-			head.elipMidpoint();
+			head.draw();
 			rightArm.draw();
 			leftArm.draw();
 			rightLeg.draw();
 			leftLeg.draw();
-			body.midPointCircleDraw();  
+			body.draw();  
 		}
 	private:
 		Elip head;

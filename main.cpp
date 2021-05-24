@@ -98,6 +98,7 @@ int main(int argc, char** argv) {
 	
 	secondslast = difftime(timer,mktime(&y2k));
 	std::cout<<std::fixed<<seconds;
+	int i =0;
 //	while(true){
 //		delay(20);
 //		time(&timer);
@@ -110,6 +111,16 @@ int main(int argc, char** argv) {
 //		human.Draw();
 //		secondslast = seconds;
 //		std::cout<<seconds<<std::endl;
+//		i++;
+//		if(i==50){
+//			i=0;
+//			Matrix4x4 trans = translate(50,0);
+//			colorDraw = CYAN;
+//			human.Draw();
+//			colorDraw = RED;
+//			human.Transformation(trans);
+//			human.Draw();
+//		}
 //	}
 	//-----------------------------
 	
@@ -158,6 +169,9 @@ int main(int argc, char** argv) {
 			}
 			for(std::vector<Button*>::iterator it= buttons.begin(); it != buttons.end(); ++it){
 				if((*it)->is_in_range(x,y)){
+					(*it)->set_highlight(true);
+					(*it)->visible();
+					(*it)->setChose(true);
 					if((*it)->getName() == "CLEAR"){
 						first_screen();
 						break;
@@ -166,9 +180,6 @@ int main(int argc, char** argv) {
 						put_pixel(x_coord, y_coord);
 						break;
 					}
-					(*it)->set_highlight(true);
-					(*it)->visible();
-					(*it)->setChose(true);
 				}else if((*it)->get_highlight()){
 					(*it)->set_highlight(false);
 					(*it)->setChose(false);
@@ -203,6 +214,7 @@ void first_screen(){
 	}
 	for(std::vector<TextBox*>::iterator it=textBoxs.begin();it!=textBoxs.end();++it){
 		(*it)->visible();
+		(*it)->clear();
 	}
 }
 

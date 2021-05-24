@@ -1,8 +1,8 @@
 #ifndef _ve_
 #define _ve_
-const int min = -90;
-const int max = 90;
-const int x_offset = 800;
+const int min = -70;
+const int max = 70;
+const int x_offset = 300;
 const int y_offset = 30;
 int colorDraw = RED;
 
@@ -40,7 +40,7 @@ int daunhay(int x,int y){
 			line(x,y,x,y+10);
 			nhay=1;
 		}
-		while((!kbhit())&&(dem<40)){
+		while((!kbhit())&&(dem<40)&&!ismouseclick(WM_LBUTTONDOWN)){
 			delay(1);
 			dem++;
 		}
