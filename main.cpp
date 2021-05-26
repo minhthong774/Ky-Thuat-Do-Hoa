@@ -77,6 +77,13 @@ int main(int argc, char** argv) {
 	
 	TextBox* textBoxRotateAngle = new TextBox(210,690,250,710, "GET ANGLE ROTATE");
 	
+	TextBox* textBoxChieuDaiHinhHop = new TextBox(480,110,530,130, "CHIEU DAI HINH HOP");
+	TextBox* textBoxChieuRongHinhHop = new TextBox(580,110,630,130, "CHIEU RONG HINH HOP");
+	TextBox* textBoxChieuCaoHinhHop = new TextBox(680,110,730,130, "CHIEU CAO HINH HOP");
+	
+	TextBox* textBoxChieuCaoHinhTru = new TextBox(480,190,530,210, "CHIEU CAO HINH TRU");
+	TextBox* textBoxBanKinhHinhTru = new TextBox(580,190,630,210, "BAN KINH HINH TRU");
+	
 	buttons.push_back(button1);
 	buttons.push_back(button2);
 	buttons.push_back(button3);
@@ -110,6 +117,12 @@ int main(int argc, char** argv) {
 	textBoxs.push_back(textBoxScaley);
 	
 	textBoxs.push_back(textBoxRotateAngle);
+	
+	textBoxs.push_back(textBoxChieuDaiHinhHop);
+	textBoxs.push_back(textBoxChieuRongHinhHop);
+	textBoxs.push_back(textBoxChieuCaoHinhHop);
+	textBoxs.push_back(textBoxChieuCaoHinhTru);
+	textBoxs.push_back(textBoxBanKinhHinhTru);
 	
 	first_screen();
 	put_pixel(0,0);
@@ -262,5 +275,10 @@ void first_screen(){
 		(*it)->clear();
 		(*it)->visible();
 	}
+	outtextxy(455,120,"D:");
+	outtextxy(555,120,"R:");
+	outtextxy(655,120,"C:");
+	outtextxy(455,200,"C:");
+	outtextxy(555,200,"BK:");
 }
 
