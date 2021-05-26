@@ -72,6 +72,7 @@ class TextBox{
 			this->name = name;
 			this->highlight = false;
 			this->chose = false;
+			this->text = NULL;
 		}
 		
 		void set_highlight(bool highlight){
@@ -135,11 +136,11 @@ class TextBox{
 			int x=getx(),y=gety();
 			char* s=new char[100];
 			int xnhay=x,ynhay=y;
+			std::cout<<std::endl<<this->text;
 			if(this->text != NULL){
 				s = this->text;
 				i = strlen(s);
-				std::cout<<i;
-				std::cout<<s;
+				std::cout<<std::endl<<i;
 				outtext(s);
 				xnhay=getx();
 				ynhay=gety();
@@ -150,6 +151,7 @@ class TextBox{
 				if(kbhit()){
 					s[i]=getch();
 					if(s[i]==13){
+						s[i]='\0';
 						visible();
 						break;
 					}

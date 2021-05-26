@@ -41,6 +41,20 @@ int main(int argc, char** argv) {
 	Button* button8 = new Button(50,330,100,350, "X: ");
 	Button* button9 = new Button(50,350,100,370, "Y: ");
 	
+	Button* button10 = new Button(50,400,200,440, "TU DONG");
+	Button* button11 = new Button(50,440,200,480, "THU CONG");
+	Button* button12 = new Button(50,480,200,520, "DOI XUNG OX");
+	Button* button13 = new Button(50,520,200,560, "DOI XUNG OY");
+	Button* button14 = new Button(50,560,200,600, "DOI XUNG O");
+	Button* button15 = new Button(50,600,200,640, "TINH TIEN");
+	Button* button16 = new Button(50,640,200,680, "BIEN DANG");
+	Button* button17 = new Button(50,680,200,720, "QUAY");
+	Button* button18 = new Button(250,20,450,60, "3D");
+	Button* button19 = new Button(250,60,450,100, "2D");
+	Button* button20 = new Button(250,100,450,140, "HINH HOP");
+	Button* button21 = new Button(250,140,450,180, "HINH CAU");
+	Button* button22 = new Button(250,180,450,220, "HINH TRU");
+	
 	std::map<std::string,int> modes;
 	modes.insert(std::pair<std::string,int>("NET DUT", 0));
 	modes.insert(std::pair<std::string,int>("NET CHAM GACH", 1));
@@ -55,6 +69,14 @@ int main(int argc, char** argv) {
 	TextBox* textBoxx = new TextBox(110,330,150,350, "GET X");
 	TextBox* textBoxy = new TextBox(110,350,150,370, "GET Y");
 	
+	TextBox* textBoxTranslatex = new TextBox(210,610,250,630, "GET X TRANSLATE");
+	TextBox* textBoxTranslatey = new TextBox(260,610,300,630, "GET Y TRANSLATE");
+	
+	TextBox* textBoxScalex = new TextBox(210,650,250,670, "GET X SCALE");
+	TextBox* textBoxScaley = new TextBox(260,650,300,670, "GET Y SCALE");
+	
+	TextBox* textBoxRotateAngle = new TextBox(210,690,250,710, "GET ANGLE ROTATE");
+	
 	buttons.push_back(button1);
 	buttons.push_back(button2);
 	buttons.push_back(button3);
@@ -64,8 +86,30 @@ int main(int argc, char** argv) {
 	buttons.push_back(button7);
 	buttons.push_back(button8);
 	buttons.push_back(button9);
+	buttons.push_back(button10);
+	buttons.push_back(button11);
+	buttons.push_back(button12);
+	buttons.push_back(button13);
+	buttons.push_back(button14);
+	buttons.push_back(button15);
+	buttons.push_back(button16);
+	buttons.push_back(button17);
+	buttons.push_back(button18);
+	buttons.push_back(button19);
+	buttons.push_back(button20);
+	buttons.push_back(button21);
+	buttons.push_back(button22);
+	
 	textBoxs.push_back(textBoxx);
 	textBoxs.push_back(textBoxy);
+	
+	textBoxs.push_back(textBoxTranslatex);
+	textBoxs.push_back(textBoxTranslatey);
+	
+	textBoxs.push_back(textBoxScalex);
+	textBoxs.push_back(textBoxScaley);
+	
+	textBoxs.push_back(textBoxRotateAngle);
 	
 	first_screen();
 	put_pixel(0,0);
@@ -180,6 +224,7 @@ int main(int argc, char** argv) {
 						put_pixel(x_coord, y_coord);
 						break;
 					}
+					//goi cac ham ve 2D o day
 				}else if((*it)->get_highlight()){
 					(*it)->set_highlight(false);
 					(*it)->setChose(false);
@@ -195,6 +240,7 @@ int main(int argc, char** argv) {
 					if((*it)->getName() == "GET Y"){
 						cston((*it)->getText(), &y_coord);
 					};
+					//lay toa do o day
 				}
 			}
 			
@@ -213,8 +259,8 @@ void first_screen(){
 		(*it)->visible();
 	}
 	for(std::vector<TextBox*>::iterator it=textBoxs.begin();it!=textBoxs.end();++it){
-		(*it)->visible();
 		(*it)->clear();
+		(*it)->visible();
 	}
 }
 

@@ -2,7 +2,7 @@
 #define _ve_
 const int min = -70;
 const int max = 70;
-const int x_offset = 300;
+const int x_offset = 600;
 const int y_offset = 30;
 int colorDraw = RED;
 
