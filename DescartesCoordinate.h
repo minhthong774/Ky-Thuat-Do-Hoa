@@ -50,6 +50,27 @@ void draw_xOy(){
 	outtextxy(5*max+ x_offset + 15, 5*max+ y_offset + 5, "O");
 }
 
+void drawOxyz(){
+	draw_xOy();
+	setcolor(1);
+	line(x_offset-10 +5, y_offset+max*5*2+10, x_offset+max*5*2+10 +5 , y_offset-10);
+	draw_triangle_direction(x_offset+max*5*2+10 +5 , y_offset-10,
+							x_offset+max*5*2+10 +5 -10 , y_offset-10,
+							x_offset+max*5*2+10 +5 , y_offset-10 + 10);
+	outtextxy(x_offset+max*5*2+10 +5 , y_offset-10+20,"Z");
+	reset_color();
+}
+
+void draw_xOy_without_xOy(){			
+	for(int x = min;x<=max;x++){
+		for(int y = min;y<=max;y++){
+			put_pixel_grid(to_screen_coord_x(x),to_screen_coord_y(y));
+		}
+	}
+	setcolor(1);
+	reset_color();
+}
+
 
 bool is_in_range(int x, int y){
 	return (x>x_offset && x<5*max*2+x_offset)&&(y > y_offset && y<5*max*2+y_offset)?true:false;

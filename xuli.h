@@ -98,6 +98,23 @@ int cston(std::string s,int* x){
 	return 1;
 }
 
+int cston2(std::string s,float* x){
+	float a = 0;
+	if(s[0]==45){
+		for(int i=1;i<s.length();i++){
+			a=a*10+(s[i]-48);
+		}
+		a=-a;
+	}
+	else{
+		for(int i=0;i<s.length();i++){
+			a=a*10+(s[i]-48);
+		}
+	}
+	(*x)=a;
+	return 1;
+}
+
 int process_coord(){//nhap so tu ban phim
 	while(kbhit()){
 		char c=getch();

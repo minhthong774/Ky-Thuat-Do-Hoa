@@ -130,17 +130,15 @@ class TextBox{
 			while(kbhit()){
 				char c=getch();
 			}
-			int length=2;
+			int length=3;
 			int i=0;
 			moveto(left+5,top+5);
 			int x=getx(),y=gety();
 			char* s=new char[100];
 			int xnhay=x,ynhay=y;
-			std::cout<<std::endl<<this->text;
 			if(this->text != NULL){
 				s = this->text;
 				i = strlen(s);
-				std::cout<<std::endl<<i;
 				outtext(s);
 				xnhay=getx();
 				ynhay=gety();
@@ -152,6 +150,7 @@ class TextBox{
 					s[i]=getch();
 					if(s[i]==13){
 						s[i]='\0';
+						this->text = s;
 						visible();
 						break;
 					}
@@ -169,7 +168,7 @@ class TextBox{
 					xnhay=getx();
 					ynhay=gety();
 					if(i>0)i--;
-					if(i==0)length=2;
+					if(i==0)length=3;
 				}
 				else if(i<length){
 					if((s[i]>=48)&&(s[i]<=57)){//chi nhan ki tu la so
@@ -181,7 +180,7 @@ class TextBox{
 							ynhay=gety();
 					}
 					else if(s[i]==45&&(i==0)){
-						length=3;
+						length=4;
 						s[i+1]='\0';
 						i++;
 						moveto(x,y);
@@ -195,6 +194,7 @@ class TextBox{
 		 			int x,y;
 		 			getmouseclick(WM_LBUTTONDOWN,x,y);
 		 			if(!this->is_in_range(x,y)){
+		 				this->text = s;
 		 				visible();
 						break;
 					 }

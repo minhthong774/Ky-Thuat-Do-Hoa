@@ -62,6 +62,37 @@ namespace transformation{
 			Vec4 result(xr,yr,zr,wr);
 			return result;
 		}
+		Vec4 tinhTien(int x1, int y1) {
+			Vec4 result(this->getX() + x1, this->getY() + y1);
+			return  result;
+		}
+		double convert(double degree) {
+			double pi = 3.14159265359;
+			return (degree*(pi/180.0));
+		}
+		float getX() {
+			return this->x;
+		}
+		float getY() {
+			return this->y;
+		}
+		Vec4 rotate(double degree) {
+			float radian = convert(degree);
+			int x1, y1;				
+			x1 = round(this->getX()*cos(radian) - this->getY()*sin(radian));
+			y1 = round(this->getX()*sin(radian) + this->getY()*cos(radian)); 
+			Vec4 result(x1, y1);
+			return result;
+		}			
+		Vec4 quayQuanhDiem(Vec4 *p, double degree) {
+			Vec4 result(tinhTien(-p->x,-p->y).rotate(degree).tinhTien(p->x,p->y));
+			return result;
+		}
+		Vec4 quayQuanhDiem2(Vec4 *p, double degree) {
+			Vec4 result(tinhTien(-p->x ,-p->y).rotate(degree).tinhTien(p->x ,p->y));
+			return result;
+		}			
+			
 		public:
 			float x,y,z,w;
 	};
@@ -77,7 +108,7 @@ namespace transformation{
 		return result;
 	}
 	
-	Matrix4x4 scale(int x, int y){
+	Matrix4x4 scale(float x, float y){
 		float arr[]={
 			x,0,0,0,
 			0,y,0,0,

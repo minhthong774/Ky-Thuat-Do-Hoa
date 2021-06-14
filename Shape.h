@@ -35,6 +35,12 @@ namespace shape{
 				Line::getInstance()->drawLine(vertex2, vertex3);
 				Line::getInstance()->drawLine(vertex1, vertex3);
 			} 
+			
+			void draw2(){
+				Line::getInstance()->drawLine2(vertex1, vertex2);
+				Line::getInstance()->drawLine2(vertex2, vertex3);
+				Line::getInstance()->drawLine2(vertex1, vertex3);
+			} 
 		public:
 			Vec4 vertex1,vertex2,vertex3;
 	};
@@ -79,7 +85,7 @@ namespace shape{
 			Vec4 vertex1,vertex2,vertex3,vertex4;
 	};
 	
-	class Elip{
+		class Elip{
 		public:
 			Elip(){
 			}
@@ -90,11 +96,31 @@ namespace shape{
 				
 			}
 			
+			Vec4 getCenter() {
+				return this->center;
+			}
+			
+			int getR() {
+				return this->a;
+			}
+			
 			void transform(Matrix4x4 matrixtransform){
 				center = center*matrixtransform;
 			}
 			
-			void elipMidpoint(){
+			void calculateRadius(float scaleFactor) {
+				if(a == b) {
+					if(scaleFactor < 1) {
+						this->a = this->a - scaleFactor;
+						this->b = this->a;
+					} else {
+						this->a = this->a*scaleFactor;
+						this->b = this->a;
+					}
+				}
+			}
+			
+			void elipMidpoint2(int color){
 				int xc = center.x;
 				int yc = center.y;
 			    int x, y, fx, fy, a2, b2, p;
@@ -104,10 +130,10 @@ namespace shape{
 			    b2 = b*b;
 			    fx = 0;
 			    fy = 2 * a2 * y;
-			    put_pixel(xc+x, yc+y);
-			    put_pixel(xc-x, yc+y);
-			    put_pixel(xc+x, yc-y);
-			    put_pixel(xc-x, yc-y);
+			    put_pixel4(xc+x, yc+y, color);
+			    put_pixel4(xc-x, yc+y, color);
+			    put_pixel4(xc+x, yc-y, color);
+			    put_pixel4(xc-x, yc-y, color);
 			    p = ROUND(b2 -(a2*b) + (0.25*a2));//p=b2 - a2*b +a2/4
 			    while(fx<fy)
 			    {
@@ -123,14 +149,14 @@ namespace shape{
 			            p += b2*(2*x +3) + a2*(2- 2*y);//p=p +b2(2x +3) +a2(2-2y)
 			            fy -= 2*a2;
 			        }
-			        put_pixel(xc+x, yc+y);
-			    	put_pixel(xc-x, yc+y);
-			    	put_pixel(xc+x, yc-y);
-			   		put_pixel(xc-x, yc-y);
+			        put_pixel4(xc+x, yc+y, color);
+			    	put_pixel4(xc-x, yc+y, color);
+			    	put_pixel4(xc+x, yc-y, color);
+			   		put_pixel4(xc-x, yc-y, color);
 			    }
 			    p = ROUND(b2*(x +0.5)*(x +0.5) + a2*(y-1)*(y-1) - a2*b2);
 			    //
-			    while(y>0)
+			    while(y>=0)
 			    {
 			        y--;
 			        fy -= 2*a2;
@@ -144,12 +170,132 @@ namespace shape{
 			            fx += 2*b2;
 			            p += b2*(2*x +2) +a2*(3- 2*y);//p=p+ b2(2x +2) + a2(3-2y)
 			        }
-			        put_pixel(xc+x, yc+y);
-			    	put_pixel(xc-x, yc+y);
-			    	put_pixel(xc+x, yc-y);
-			    	put_pixel(xc-x, yc-y);
+			        put_pixel4(xc+x, yc+y, color);
+			    	put_pixel4(xc-x, yc+y, color);
+			    	put_pixel4(xc+x, yc-y, color);
+			    	put_pixel4(xc-x, yc-y, color);
 			    }
 			}
+			
+			
+			void elipMidpoint(){
+				if(a<b){
+					int xc = center.x;
+					int yc = center.y;
+				    int x, y, dx, dy, d1, d2;
+				    x = 0;
+				    y = b;
+				    d1 = (b * b) - (a * a * b) +
+	                     (0.25 * a * a);
+				    dx = 2 * b * b * x;
+				    dy = 2 * a * a * y;
+				    while(dx<dy)
+				    {
+				        put_pixel(xc+x, yc+y);
+					    put_pixel(xc-x, yc+y);
+					    put_pixel(xc+x, yc-y);
+					    put_pixel(xc-x, yc-y);
+				        if(d1<0)
+				        {
+				        	x++;
+				            dx = dx + (2 * b * b);
+	            			d1 = d1 + dx + (a * a);
+				        }
+				        else
+				        {
+				            x++;
+				            y--;
+				            dx = dx + (2 * b * b);
+				            dy = dy - (2 * a * a);
+				            d1 = d1 + dx - dy + (b * b);
+				        }
+				    }
+				    d2 = ((b * b) * ((x + 0.5) * (x + 0.5)))+
+			         ((a * a) * ((y - 1) * (y - 1))) -
+			          (a * a * b * b);
+				    while(y>=0)
+				    {
+				    	put_pixel(xc+x, yc+y);
+					    put_pixel(xc-x, yc+y);
+					    put_pixel(xc+x, yc-y);
+					    put_pixel(xc-x, yc-y);
+				        if(d2 >0)
+				        {
+				            y--;
+				            dy = dy - (2 *a * a);
+				            d2 = d2 + (a * a) - dy;
+				        }
+				        else
+				        {
+				            y--;
+				            x++;
+				            dx = dx + (2 * b * b);
+				            dy = dy - (2 * a * a);
+				            d2 = d2 + dx - dy + (a * a);
+				        }
+				        
+				    }
+				}
+				else{
+					int xc = center.x;
+					int yc = center.y;
+				    int x, y, dx, dy, d1, d2;
+				    x = a;
+				    y = 0;
+				    d1 = (a * a) - (b * b * a) +
+	                     (0.25 * b * b);
+				    dx = 2 * b * b * x;
+				    dy = 2 * a * a * y;
+				    while(dx>dy)
+				    {
+				        put_pixel(xc+x, yc+y);
+					    put_pixel(xc-x, yc+y);
+					    put_pixel(xc+x, yc-y);
+					    put_pixel(xc-x, yc-y);
+				        if(d1<0)
+				        {
+				        	y++;
+				            dy = dy + (2 * a * a);
+	            			d1 = d1 + dy + (a * a);
+				        }
+				        else
+				        {
+				            y++;
+				            x--;
+				            dx = dx - (2 * b * b);
+				            dy = dy + (2 * a * a);
+				            d1 = d1 + dy - dx + (a * a);
+				        }
+				    }
+				    d2 = ((b * b) * ((x - 1) * (x - 1)))+
+			         ((a * a) * ((y + 0.5) * (y + 0.5))) -
+			          (a * a * b * b);
+				    while(x>=0)
+				    {
+				    	put_pixel(xc+x, yc+y);
+					    put_pixel(xc-x, yc+y);
+					    put_pixel(xc+x, yc-y);
+					    put_pixel(xc-x, yc-y);
+				        if(d2 >0)
+				        {
+				            x--;
+				            dx = dx - (2 *b * b);
+				            d2 = d2 + (y * y) - dx;
+				        }
+				        else
+				        {
+				            x--;
+				            y++;
+				            dx = dx - (2 * b * b);
+				            dy = dy + (2 * a * a);
+				            d2 = d2 + dy - dx + (b * b);
+				        }
+				        
+				    }
+				}
+			}
+			
+			
 			void midPointCircleDraw() {
 				int r = a;
 				int x_centre = center.x;
@@ -161,31 +307,15 @@ namespace shape{
 			 	p= 5/4 - r;
 			 	
 				while(x < y) {
-						if(r < 15) {
-							if(dem %12 !=6 && dem%12!=7 ) {
-							put_pixel(x_centre + x, y_centre + y);	
-							put_pixel(x_centre + y, y_centre + x);
-							put_pixel(x_centre - x, y_centre + y);
-							put_pixel(x_centre - y, y_centre + x);
-											
-							put_pixel(x_centre - y, y_centre - x);
-							put_pixel(x_centre - x, y_centre - y);
-							put_pixel(x_centre + x, y_centre - y);
-							put_pixel(x_centre + y, y_centre - x);
-					}
-						} else  {
-							if(dem %12 !=11 && dem%12!=10 && dem%12!=9) {
-							put_pixel(x_centre + x, y_centre + y);	
-							put_pixel(x_centre + y, y_centre + x);
-							put_pixel(x_centre - x, y_centre + y);
-							put_pixel(x_centre - y, y_centre + x);
-											
-							put_pixel(x_centre - y, y_centre - x);
-							put_pixel(x_centre - x, y_centre - y);
-							put_pixel(x_centre + x, y_centre - y);
-							put_pixel(x_centre + y, y_centre - x);
-					}
-						}
+					put_pixel(x_centre + x, y_centre + y);	
+					put_pixel(x_centre + y, y_centre + x);
+					put_pixel(x_centre - x, y_centre + y);
+					put_pixel(x_centre - y, y_centre + x);
+									
+					put_pixel(x_centre - y, y_centre - x);
+					put_pixel(x_centre - x, y_centre - y);
+					put_pixel(x_centre + x, y_centre - y);
+					put_pixel(x_centre + y, y_centre - x);
 					
 			
 					if( p < 0) {
@@ -197,7 +327,89 @@ namespace shape{
 					dem++;
 					x++;	
 			}
+		}
+		
+		void haftRightCircleDraw() {
+			int r = a;
+				int x_centre = center.x;
+				int y_centre = center.y;
+				int x= 0, y = r;
+				int  p;
+				int dem = 0;
+				
+			 	p= 5/4 - r;
+			 	
+				while(x < y) {	
+					put_pixel(x_centre + y, y_centre + x);
+					put_pixel(x_centre + x, y_centre - y);
+					put_pixel(x_centre + y, y_centre - x);
+			
+					if( p < 0) {
+						p+= 2*x +3;
+					} else {
+						p+= 2*x -2*y +5;	
+						y--;
+					}
+					dem++;
+					x++;	
 			}
+		}
+		
+		void haftTopCircleDraw() {
+			int r = a;
+				int x_centre = center.x;
+				int y_centre = center.y;
+				int x= 0, y = r;
+				int  p;
+				int dem = 0;
+				
+			 	p= 5/4 - r;
+			 	
+				while(x < y) {
+					put_pixel(x_centre + x, y_centre + y);	
+					put_pixel(x_centre + y, y_centre + x);
+					put_pixel(x_centre - x, y_centre + y);
+					put_pixel(x_centre - y, y_centre + x);					
+			
+					if( p < 0) {
+						p+= 2*x +3;
+					} else {
+						p+= 2*x -2*y +5;	
+						y--;
+					}
+					dem++;
+					x++;	
+			}
+		}
+		
+		void haftLeftCircleDraw() {
+			int r = a;
+				int x_centre = center.x;
+				int y_centre = center.y;
+				int x= 0, y = r;
+				int  p;
+				int dem = 0;
+				
+			 	p= 5/4 - r;
+			 	
+				while(x < y) {
+//					put_pixel(x_centre - x, y_centre + y);
+					put_pixel(x_centre - y, y_centre + x);
+									
+					put_pixel(x_centre - y, y_centre - x);
+					put_pixel(x_centre - x, y_centre - y);				
+			
+					if( p < 0) {
+						p+= 2*x +3;
+					} else {
+						p+= 2*x -2*y +5;	
+						y--;
+					}
+					dem++;
+					x++;	
+			}
+		}
+		
 			void draw(){
 				if(a==b){
 					midPointCircleDraw();
@@ -208,7 +420,7 @@ namespace shape{
 			}
 		private:
 			Vec4 center;
-			int a, b;
+			float a, b;
 	};
 	
 	class Circle{
@@ -219,11 +431,36 @@ namespace shape{
 			}
 			Circle(int x, int y, int r):elip(x,y,r,r){
 			}
+			
+			Vec4 getCenter() {
+			return	this->elip.getCenter();
+			}
+			
+			int getR() {
+				return this->elip.getR();
+			}
+			
 			void transform(Matrix4x4 matrixtransform){
 				this->elip.transform(matrixtransform);
 			}
+			void calculateRadius(float scaleFactor) {
+				this->elip.calculateRadius(scaleFactor);
+			}
 			void draw(){
 				this->elip.draw();
+			}
+			
+			void draw2(int color) {
+				this->elip.elipMidpoint2(color);
+			}
+			void drawHaftTop() {
+				this->elip.haftTopCircleDraw();
+			}
+			void drawHaftLeft() {
+				this->elip.haftLeftCircleDraw();
+			}
+			void drawHaftRight() {
+				this->elip.haftRightCircleDraw();
 			}
 		private:
 			Elip elip;
@@ -231,13 +468,4 @@ namespace shape{
 	
 	
 }
-
-
-
-
-
-
-
-
-
 #endif
